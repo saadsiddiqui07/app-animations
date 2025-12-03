@@ -1,12 +1,16 @@
+import GlobalLayout from '@/components/global-layout';
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import { Link } from 'expo-router';
 import { StyleSheet } from 'react-native';
 
 export default function HomeScreen() {
   return (
-    <ThemedView style={styles.container}>
+    <GlobalLayout style={styles.container}> 
       <ThemedText type="title">Animation Examples</ThemedText>
-    </ThemedView>
+      <ThemedText type="subtitle">
+        <Link href="/chat-reaction">Chat Reaction</Link>
+      </ThemedText>
+    </GlobalLayout>
   );
 }
 

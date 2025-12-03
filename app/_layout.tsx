@@ -10,8 +10,9 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="index" options={{ title: 'Animations App' }} />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="chat-reaction" options={{ title: 'Chat Reaction' }} />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
