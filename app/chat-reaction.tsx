@@ -1,27 +1,11 @@
+import ChatMessage from "@/components/chat-message/ChatMessage";
 import GlobalLayout from "@/components/global-layout";
-import { ThemedText } from "@/components/themed-text";
 import { CHAT_DATA } from "@/constants";
-import { CHAT_ITEM } from "@/types";
+import React from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const USER_ID = `a1b2c3`;
-
-const RenderItem = ({ item }: { item: CHAT_ITEM }) => {
-  const isMyMessage = item.userId === USER_ID;
-
-  return (
-    <ThemedText
-      style={{
-        marginLeft: isMyMessage ? "auto" : 0,
-        backgroundColor: isMyMessage ? "red" : "green",
-      }}
-    >
-      {item.message}
-    </ThemedText>
-  );
-};
 
 export default function ChatReactionScreen() {
   const { bottom } = useSafeAreaInsets();
@@ -36,7 +20,7 @@ export default function ChatReactionScreen() {
             styles.contentContainerStyle,
             { paddingBottom: bottom },
           ]}
-          renderItem={({ item }) => <RenderItem item={item} />}
+          renderItem={({ item }) =>   <ChatMessage item={item} onPress={() => console.log(item.id)} />}
           keyExtractor={(_, i) => i.toString()}
         />
       </GlobalLayout>
