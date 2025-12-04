@@ -1,4 +1,6 @@
 import ActionMenu from "@/components/chat-reaction/ActionMenu";
+import ChatHeader from "@/components/chat-reaction/ChatHeader";
+import ChatInput from "@/components/chat-reaction/ChatInput";
 import ChatMessage from "@/components/chat-reaction/ChatMessage";
 import ReactionBar from "@/components/chat-reaction/ReactionBar";
 import GlobalLayout from "@/components/global-layout";
@@ -7,7 +9,13 @@ import { BlurView } from "expo-blur";
 import React, { useEffect, useState } from "react";
 import { Dimensions, FlatList, Pressable, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, {
+  Easing,
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function ChatReactionScreen() {
@@ -33,15 +41,22 @@ export default function ChatReactionScreen() {
   useEffect(() => {
     if (selectedId && selectedY != null) {
       overlayOpacity.value = 0;
-      overlayOpacity.value = withTiming(1, { duration: 250, easing: Easing.out(Easing.cubic) });
+      overlayOpacity.value = withTiming(1, {
+        duration: 250,
+        easing: Easing.out(Easing.cubic),
+      });
       translateY.value = selectedY;
-      translateY.value = withTiming(screenHeight, { duration: 500, easing: Easing.out(Easing.cubic) });
+      translateY.value = withTiming(screenHeight, {
+        duration: 500,
+        easing: Easing.out(Easing.cubic),
+      });
     }
   }, [selectedId, selectedY, screenHeight, overlayOpacity, translateY]);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <GlobalLayout style={styles.container}>
+        <ChatHeader />
         <Pressable style={styles.pressable} onPress={() => setSelectedId(null)}>
           <FlatList
             data={CHAT_DATA.chat}
@@ -50,28 +65,32 @@ export default function ChatReactionScreen() {
               styles.contentContainerStyle,
               { paddingBottom: bottom },
             ]}
-          renderItem={({ item }) => (
-            <ChatMessage
-              item={item}
-              selected={selectedId === item.id}
-              onPress={(y) => {
-                setSelectedId(item.id);
-                setSelectedY(y);
-              }}
-            />
-          )}
-          keyExtractor={(_, i) => i.toString()}
-        />
+            renderItem={({ item }) => (
+              <ChatMessage
+                item={item}
+                selected={selectedId === item.id}
+                onPress={(y) => {
+                  setSelectedId(item.id);
+                  setSelectedY(y);
+                }}
+              />
+            )}
+            keyExtractor={(_, i) => i.toString()}
+          />
           {selectedId && (
             <AnimatedPressable
               style={[styles.blurOverlay, blurAnimatedStyle]}
               onPress={() => {
-                overlayOpacity.value = withTiming(0, { duration: 200, easing: Easing.out(Easing.cubic) }, (finished) => {
-                  if (finished) {
-                    runOnJS(setSelectedId)(null);
-                    runOnJS(setSelectedY)(null);
+                overlayOpacity.value = withTiming(
+                  0,
+                  { duration: 200, easing: Easing.out(Easing.cubic) },
+                  (finished) => {
+                    if (finished) {
+                      runOnJS(setSelectedId)(null);
+                      runOnJS(setSelectedY)(null);
+                    }
                   }
-                });
+                );
               }}
             >
               <BlurView
@@ -82,8 +101,13 @@ export default function ChatReactionScreen() {
               {CHAT_DATA.chat.find((c) => c.id === selectedId) && (
                 <Animated.View style={[styles.overlayMessage, overlayStyle]}>
                   {(() => {
-                    const item = CHAT_DATA.chat.find((c) => c.id === selectedId)!;
-                    const align = item.userId === CURRENT_USER_ID ? "flex-end" : "flex-start";
+                    const item = CHAT_DATA.chat.find(
+                      (c) => c.id === selectedId
+                    )!;
+                    const align =
+                      item.userId === CURRENT_USER_ID
+                        ? "flex-end"
+                        : "flex-start";
                     return (
                       <>
                         <ReactionBar visible align={align} />
@@ -97,6 +121,7 @@ export default function ChatReactionScreen() {
             </AnimatedPressable>
           )}
         </Pressable>
+        <ChatInput />
       </GlobalLayout>
     </GestureHandlerRootView>
   );
