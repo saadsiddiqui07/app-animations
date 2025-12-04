@@ -2,6 +2,7 @@ import { ThemedText } from "../themed-text";
 
 import { CHAT_ITEM } from "@/types";
 import { useEffect } from "react";
+import { StyleSheet } from "react-native";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { ThemedView } from "../themed-view";
 
@@ -30,7 +31,7 @@ const ChatMessage = ({ item, onPress, selected }: { item: CHAT_ITEM, onPress: (y
 
   return (
     <Animated.View style={animatedStyle}>
-      <ThemedView style={{ padding: 10, borderRadius: 10, backgroundColor: isMyMessage ? 'royalblue' : 'gray', maxWidth: '80%', alignSelf: isMyMessage ? 'flex-end' : 'flex-start' }}>
+      <ThemedView style={[styles.message, { backgroundColor: isMyMessage ? 'royalblue' : 'gray', alignSelf: isMyMessage ? 'flex-end' : 'flex-start' }]}>
         <ThemedText onPress={(e) => onPress(e.nativeEvent.pageY)}>
           {item.message}
         </ThemedText>
@@ -38,5 +39,13 @@ const ChatMessage = ({ item, onPress, selected }: { item: CHAT_ITEM, onPress: (y
     </Animated.View>
   );
 };
+
+const styles = StyleSheet.create({
+  message: {
+    padding: 10,
+    borderRadius: 10,
+    maxWidth: '80%',
+  }
+});
 
 export default ChatMessage;
