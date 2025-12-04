@@ -20,7 +20,7 @@ export default function ChatReactionScreen() {
             styles.contentContainerStyle,
             { paddingBottom: bottom },
           ]}
-          renderItem={({ item }) =>   <ChatMessage item={item} onPress={() => console.log(item.id)} />}
+          renderItem={({ item }) =>   <ChatMessage item={item} onPress={(y) => console.log(item.id, y)} />}
           keyExtractor={(_, i) => i.toString()}
         />
       </GlobalLayout>
