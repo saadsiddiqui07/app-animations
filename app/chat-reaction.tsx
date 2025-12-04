@@ -2,14 +2,27 @@ import ChatMessage from "@/components/chat-message/ChatMessage";
 import GlobalLayout from "@/components/global-layout";
 import { CHAT_DATA } from "@/constants";
 import { BlurView } from "expo-blur";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, Pressable, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function ChatReactionScreen() {
   const { bottom } = useSafeAreaInsets();
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedY, setSelectedY] = useState<number | null>(null);
+
+  const translateY = useSharedValue(0);
+  const overlayStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: selectedY != null ? selectedY : 0 }],
+  }));
+
+  useEffect(() => {
+    if (selectedY != null) {
+      translateY.value = withTiming(selectedY, { duration: 500 });
+    }
+  }, [selectedY, translateY]);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -22,25 +35,40 @@ export default function ChatReactionScreen() {
               styles.contentContainerStyle,
               { paddingBottom: bottom },
             ]}
-            renderItem={({ item }) => (
-              <ChatMessage
-                item={item}
-                selected={selectedId === item.id}
-                onPress={(y) => setSelectedId(item.id)}
-              />
-            )}
-            keyExtractor={(_, i) => i.toString()}
-          />
+          renderItem={({ item }) => (
+            <ChatMessage
+              item={item}
+              selected={selectedId === item.id}
+              onPress={(y) => {
+                setSelectedId(item.id);
+                setSelectedY(y);
+              }}
+            />
+          )}
+          keyExtractor={(_, i) => i.toString()}
+        />
           {selectedId && (
             <Pressable
               style={styles.blurOverlay}
-              onPress={() => setSelectedId(null)}
+              onPress={() => {
+                setSelectedId(null);
+                setSelectedY(null);
+              }}
             >
               <BlurView
                 intensity={30}
                 tint="systemMaterial"
                 style={styles.blurFill}
               />
+              {CHAT_DATA.chat.find((c) => c.id === selectedId) && (
+                <Animated.View style={[styles.overlayMessage, overlayStyle]}>
+                  <ChatMessage
+                    item={CHAT_DATA.chat.find((c) => c.id === selectedId)!}
+                    selected
+                    onPress={() => {}}
+                  />
+                </Animated.View>
+              )}
             </Pressable>
           )}
         </Pressable>
@@ -70,6 +98,12 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+  },
+  overlayMessage: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    paddingHorizontal: 20,
   },
   contentContainerStyle: {
     gap: 20,
