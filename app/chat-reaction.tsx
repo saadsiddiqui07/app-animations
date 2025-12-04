@@ -1,6 +1,6 @@
-import ActionMenu from "@/components/chat-message/ActionMenu";
-import ChatMessage from "@/components/chat-message/ChatMessage";
-import ReactionBar from "@/components/chat-message/ReactionBar";
+import ActionMenu from "@/components/chat-reaction/ActionMenu";
+import ChatMessage from "@/components/chat-reaction/ChatMessage";
+import ReactionBar from "@/components/chat-reaction/ReactionBar";
 import GlobalLayout from "@/components/global-layout";
 import { CHAT_DATA } from "@/constants";
 import { BlurView } from "expo-blur";
