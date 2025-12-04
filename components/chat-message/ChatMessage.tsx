@@ -15,10 +15,10 @@ const ChatMessage = ({ item, onPress, selected }: { item: CHAT_ITEM, onPress: (y
   const translateX = useSharedValue(0);
 
   useEffect(() => {
-    scale.value = withTiming(selected ? 1.08 : 1, {
-      duration: 600,
-      easing: Easing.out(Easing.cubic),
-    });
+    // scale.value = withTiming(selected ? 1.08 : 1, {
+    //   duration: 300,
+    //   easing: Easing.out(Easing.cubic),
+    // });
     translateX.value = withTiming(selected ? (isMyMessage ? -8 : 8) : 0, {
       duration: 600,
       easing: Easing.out(Easing.cubic),
