@@ -31,7 +31,7 @@ const ChatMessage = ({ item, onPress, selected }: { item: CHAT_ITEM, onPress: (y
   return (
     <Animated.View style={animatedStyle}>
       <ThemedView style={{ padding: 10, borderRadius: 10, backgroundColor: isMyMessage ? 'royalblue' : 'gray', maxWidth: '80%', alignSelf: isMyMessage ? 'flex-end' : 'flex-start' }}>
-        <ThemedText onLongPress={(e) => onPress(e.nativeEvent.pageY)}>
+        <ThemedText onPress={(e) => onPress(e.nativeEvent.pageY)}>
           {item.message}
         </ThemedText>
       </ThemedView>
