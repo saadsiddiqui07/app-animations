@@ -3,11 +3,41 @@ import StockHeader from "@/components/stock-dashboard/Header";
 import { ThemedText } from "@/components/themed-text";
 import AnimatedCounter from "@/components/ui/animated-counter";
 import { IconSymbol } from "@/components/ui/icon-symbol.ios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
+import { CurveType, LineChart } from "react-native-gifted-charts";
 
 const StockDashboard = () => {
   const [value, setValue] = useState<number>(24908.15);
+  type Range = "1D" | "1W" | "1M" | "1Y";
+  const [range, setRange] = useState<Range>("1D");
+
+  const dataByRange = useMemo(() => {
+    const rng = (min: number, max: number) => Math.random() * (max - min) + min;
+    const generateSeries = (
+      count: number,
+      start: number,
+      volatility: number
+    ) => {
+      const arr: { value: number }[] = [];
+      let last = start;
+      for (let i = 0; i < count; i++) {
+        const drift = rng(-volatility, volatility);
+        last = Math.max(0, last + drift);
+        arr.push({ value: Number(last.toFixed(2)) });
+      }
+      return arr;
+    };
+
+    return {
+      "1D": generateSeries(24, 220, 8),
+      "1W": generateSeries(7, 220, 12),
+      "1M": generateSeries(30, 220, 10),
+      "1Y": generateSeries(12, 220, 18),
+    } as Record<Range, { value: number }[]>;
+  }, []);
+
+  const currentData = dataByRange[range];
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -93,6 +123,74 @@ const StockDashboard = () => {
               </Pressable>
             </View>
           </View>
+        </View>
+
+     
+        
+        {/* animated line chart */}
+        <View style={{ marginTop: 16 }}>
+          <LineChart
+            data={currentData}
+            isAnimated
+            animateOnDataChange
+            onDataChangeAnimationDuration={600}
+            curved
+            curveType={CurveType.CUBIC}
+            curvature={0.2}
+            areaChart
+            color={"#4ADDBA"}
+            startFillColor={"#4ADDBA"}
+            endFillColor={"#4ADDBA"}
+            startOpacity={0.25}
+            endOpacity={0.02}
+            thickness={3}
+            hideDataPoints
+            hideRules
+            hideYAxisText
+            initialSpacing={0}
+            adjustToWidth
+            showVerticalLines
+            verticalLinesColor={"rgba(255,255,255,0.06)"}
+            xAxisColor={"rgba(255,255,255,0.06)"}
+            yAxisColor={"rgba(255,255,255,0.06)"}
+            backgroundColor={"transparent"}
+          />
+        </View>
+    {/* timeline selector */}
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 8,
+            marginTop: 20,
+          }}
+        >
+ {["1D", "1W", "1M", "1Y"].map((r) => {
+            const active = r === range;
+            return (
+              <Pressable
+                key={r}
+                onPress={() => setRange(r as Range)}
+                style={{
+                  paddingVertical: 8,
+                  paddingHorizontal: 12,
+                  borderRadius: 999,
+                  backgroundColor: active
+                    ? "lightblue"
+                    : "rgba(255, 255, 255, 0.08)",
+                }}
+              >
+                <ThemedText
+                  style={{
+                    fontSize: 13,
+                    color: active ? "black" : "lightgray",
+                  }}
+                >
+                  {r}
+                </ThemedText>
+              </Pressable>
+            );
+          })}
         </View>
       </View>
     </GlobalLayout>
