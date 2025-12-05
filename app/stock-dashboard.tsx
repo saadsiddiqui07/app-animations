@@ -35,12 +35,13 @@ const StockDashboard = () => {
           }}
         >
           {/* left side */}
-          <View style={{ flex: 1, gap: 16 }}>
+          <View style={{ flex: 1 }}>
             <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
                 gap: 32,
+                marginBottom: 12,
               }}
             >
               <Pressable style={styles.iconButton}>
@@ -54,6 +55,20 @@ const StockDashboard = () => {
               </View>
             </View>
             <AnimatedCounter value={value} fontSize={35} variant="large" />
+            <View
+              style={{ flexDirection: "row", gap: 4, alignItems: "center" }}
+            >
+              <IconSymbol
+                name="arrow.up"
+                color="lightgreen"
+                size={16}
+                style={{ transform: [{ rotate: "40deg" }] }}
+              />
+              <ThemedText style={{ fontSize: 16, color: "lightgreen" }}>
+                1.23%
+              </ThemedText>
+              <ThemedText style={{ color: "gray" }}>Today</ThemedText>
+            </View>
           </View>
 
           {/* right side */}
@@ -87,7 +102,7 @@ const StockDashboard = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "rgb(24, 24, 24)",
+    backgroundColor: "black",
   },
   iconButton: {
     padding: 16,
