@@ -7,6 +7,8 @@ import { TextProps, View } from "react-native";
 interface Props {
   value: number;
   fontSize?: number;
+  color?: string;
+  variant?: "normal" | "large";
 }
 
 const totalNumbers = [...Array(10).keys()];
@@ -21,10 +23,14 @@ const TickerList = memo(
     digit,
     fontSize,
     index,
+    color,
+    fontWeight,
   }: {
     digit: number;
     fontSize: number;
     index: number;
+    color: string;
+    fontWeight: "500" | "700";
   }) => {
     return (
       <View style={{ height: fontSize, overflow: "hidden" }}>
@@ -38,7 +44,8 @@ const TickerList = memo(
               style={{
                 fontSize: fontSize,
                 lineHeight: fontSize * 1.1,
-                fontWeight: "800",
+                fontWeight: fontWeight,
+                color: color,
               }}
             >
               {number}
@@ -54,7 +61,9 @@ TickerList.displayName = "TickerList";
 const AnimatedCounter = ({
   value,
   fontSize = 40,
- }: Props) => {
+  color = "white",
+  variant = "normal",
+}: Props) => {
   const formatted = useMemo(() => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -63,6 +72,8 @@ const AnimatedCounter = ({
   }, [value]);
 
   const valueArray = useMemo(() => formatted.toString().split(""), [formatted]);
+
+  const computedWeight: "500" | "700" = variant === "large" ? "700" : "500";
 
   return (
     <View>
@@ -81,6 +92,8 @@ const AnimatedCounter = ({
                 digit={parseInt(digit)}
                 fontSize={fontSize}
                 index={index}
+                color={color}
+                fontWeight={computedWeight}
               />
             );
           } else {
@@ -90,7 +103,7 @@ const AnimatedCounter = ({
                 style={{
                   fontSize: fontSize,
                   lineHeight: fontSize * 1.1,
-                  opacity: 0.5,
+                  fontWeight: computedWeight,
                 }}
               >
                 {digit}

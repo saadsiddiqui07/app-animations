@@ -18,7 +18,7 @@ const StockDashboard = () => {
   return (
     <GlobalLayout style={styles.container}>
       <StockHeader />
-      <AnimatedCounter value={value} fontSize={35} />
+      <AnimatedCounter value={value} fontSize={80} variant="large" />
     </GlobalLayout>
   );
 };
