@@ -13,6 +13,7 @@ export default function RootLayout() {
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="chat-reaction" options={{ title: 'Chat Reaction' }} />
+        <Stack.Screen name="stock-dashboard" options={{ title: 'Stock Dashboard' }} />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

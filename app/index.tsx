@@ -10,6 +10,9 @@ export default function HomeScreen() {
       <ThemedText type="subtitle">
         <Link href="/chat-reaction">Chat Reaction</Link>
       </ThemedText>
+      <ThemedText type="subtitle">
+        <Link href="/stock-dashboard">Stock Dashboard</Link>
+      </ThemedText>
     </GlobalLayout>
   );
 }
