@@ -22,7 +22,7 @@ const StockDashboard = () => {
       <StockHeader />
       <View
         style={{
-          marginTop: 28,
+          marginTop: 32,
           paddingHorizontal: 16,
           flexDirection: "column",
         }}
@@ -40,7 +40,7 @@ const StockDashboard = () => {
               style={{
                 flexDirection: "row",
                 alignItems: "center",
-                gap: 32,
+                gap: 18,
                 marginBottom: 12,
               }}
             >
