@@ -1,26 +1,24 @@
 import GlobalLayout from "@/components/global-layout";
 import StockHeader from "@/components/stock-dashboard/Header";
 import AnimatedCounter from "@/components/ui/animated-counter";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 
 const StockDashboard = () => {
   const [value, setValue] = useState<number>(24908.15);
 
-  const generateRandomValueInRange = () => {
-    setInterval(() => {
-      setValue((Math.random() * 10000 + 23500));
+  useEffect(() => {
+    const id = setInterval(() => {
+      const next = Math.random() * 10000 + 2400;
+      setValue((prev) => (prev === next ? prev : next));
     }, 2000);
-  };
-
-  useLayoutEffect(() => {
-    generateRandomValueInRange();
+    return () => clearInterval(id);
   }, []);
 
   return (
     <GlobalLayout style={styles.container}>
       <StockHeader />
-      <AnimatedCounter value={value} />
+      <AnimatedCounter value={value} fontSize={35} />
     </GlobalLayout>
   );
 };
