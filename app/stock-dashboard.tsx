@@ -128,8 +128,6 @@ const StockDashboard = () => {
           </View>
         </View>
 
-     
-        
         {/* animated line chart */}
         <View style={{ marginTop: 16 }}>
           <LineChart
@@ -159,17 +157,17 @@ const StockDashboard = () => {
             backgroundColor={"transparent"}
           />
         </View>
-    {/* timeline selector */}
+        {/* timeline selector */}
         <View
           style={{
             flexDirection: "row",
             alignItems: "center",
-            justifyContent:'space-between',
+            justifyContent: "space-between",
             marginTop: 8,
             paddingHorizontal: 8,
-           }}
+          }}
         >
- {["1D", "5D", "1W", "1M", "1Y"].map((r) => {
+          {["1D", "5D", "1W", "1M", "1Y"].map((r) => {
             const active = r === range;
             return (
               <Pressable
