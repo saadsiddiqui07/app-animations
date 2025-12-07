@@ -11,6 +11,7 @@ const StockDashboard = () => {
   const [value, setValue] = useState<number>(24908.15);
   type Range = "1D" | "1W" | "1M" | "1Y";
   const [range, setRange] = useState<Range>("1D");
+  const [showLineChart, setShowLineChart] = useState<boolean>(true);
 
   const dataByRange = useMemo(() => {
     const rng = (min: number, max: number) => Math.random() * (max - min) + min;
@@ -113,6 +114,7 @@ const StockDashboard = () => {
                 <IconSymbol name="chart.bar.xaxis" color="white" size={24} />
               </Pressable>
               <Pressable
+                onPress={() => setShowLineChart(!showLineChart)}
                 style={[styles.rightIcon, { backgroundColor: "lightblue" }]}
               >
                 <IconSymbol
@@ -161,9 +163,10 @@ const StockDashboard = () => {
           style={{
             flexDirection: "row",
             alignItems: "center",
-            gap: 8,
-            marginTop: 20,
-          }}
+            justifyContent:'space-between',
+            marginTop: 8,
+            paddingHorizontal: 8,
+           }}
         >
  {["1D", "1W", "1M", "1Y"].map((r) => {
             const active = r === range;
