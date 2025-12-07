@@ -31,7 +31,7 @@ const StockDashboard = () => {
     };
 
     return {
-      "1D": generateSeries(94, 0, 15),
+      "1D": generateSeries(94, 20, 15),
       "5D": generateSeries(120, 220, 12),
       "1W": generateSeries(128, 220, 12),
       "1M": generateSeries(150, 220, 10),
