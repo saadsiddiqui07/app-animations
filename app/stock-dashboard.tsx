@@ -9,7 +9,7 @@ import { CurveType, LineChart } from "react-native-gifted-charts";
 
 const StockDashboard = () => {
   const [value, setValue] = useState<number>(24908.15);
-  type Range = "1D" | "1W" | "1M" | "1Y";
+  type Range = "1D" | "5D" | "1W" | "1M" | "1Y";
   const [range, setRange] = useState<Range>("1D");
   const [showLineChart, setShowLineChart] = useState<boolean>(true);
 
@@ -31,10 +31,11 @@ const StockDashboard = () => {
     };
 
     return {
-      "1D": generateSeries(24, 220, 8),
-      "1W": generateSeries(7, 220, 12),
-      "1M": generateSeries(30, 220, 10),
-      "1Y": generateSeries(12, 220, 18),
+      "1D": generateSeries(94, 0, 15),
+      "5D": generateSeries(120, 220, 12),
+      "1W": generateSeries(128, 220, 12),
+      "1M": generateSeries(150, 220, 10),
+      "1Y": generateSeries(180, 10, 18),
     } as Record<Range, { value: number }[]>;
   }, []);
 
@@ -168,7 +169,7 @@ const StockDashboard = () => {
             paddingHorizontal: 8,
            }}
         >
- {["1D", "1W", "1M", "1Y"].map((r) => {
+ {["1D", "5D", "1W", "1M", "1Y"].map((r) => {
             const active = r === range;
             return (
               <Pressable
