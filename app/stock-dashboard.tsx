@@ -6,12 +6,22 @@ import { IconSymbol } from "@/components/ui/icon-symbol.ios";
 import React, { useEffect, useMemo, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { CurveType, LineChart } from "react-native-gifted-charts";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const StockDashboard = () => {
   const [value, setValue] = useState<number>(24908.15);
   type Range = "1D" | "5D" | "1W" | "1M" | "1Y";
   const [range, setRange] = useState<Range>("1D");
   const [showLineChart, setShowLineChart] = useState<boolean>(true);
+  const { bottom } = useSafeAreaInsets();
+
+  const [portfolioValue] = useState<number>(() =>
+    Number((Math.random() * 90000 + 1000).toFixed(2))
+  );
+  const [portfolioReturnPct] = useState<number>(() =>
+    Number((Math.random() * 14 - 7).toFixed(2))
+  );
+  const isPositiveReturn = portfolioReturnPct >= 0;
 
   const dataByRange = useMemo(() => {
     const rng = (min: number, max: number) => Math.random() * (max - min) + min;
@@ -193,7 +203,52 @@ const StockDashboard = () => {
               </Pressable>
             );
           })}
+      
         </View>
+          {/* PORTFOLIO CARD */}
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            backgroundColor: "rgba(255, 255, 255, 0.06)",
+            borderRadius: 16,
+            padding: 16,
+            marginTop: 16,
+          }}
+        >
+          <View style={{ gap: 4, flex: 1 }}>
+            <ThemedText style={{ fontSize: 14, color: "lightgray" }}>
+              Portfolio
+            </ThemedText>
+            <AnimatedCounter value={portfolioValue} fontSize={28} variant="large" />
+          </View>
+          <View style={{ alignItems: "flex-end", gap: 4 }}>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+              <IconSymbol
+                name={isPositiveReturn ? "arrow.up" : "arrow.down"}
+                color={isPositiveReturn ? "lightgreen" : "#ff6b6b"}
+                size={16}
+                style={{ transform: [{ rotate: isPositiveReturn ? "40deg" : "-40deg" }] }}
+              />
+              <ThemedText
+                style={{ fontSize: 16, color: isPositiveReturn ? "lightgreen" : "#ff6b6b" }}
+              >
+                {Math.abs(portfolioReturnPct).toFixed(2)}%
+              </ThemedText>
+            </View>
+            <ThemedText style={{ color: "gray" }}>Returns</ThemedText>
+          </View>
+        </View>
+      {/* bottom bar */}
+      </View>
+      <View style={[styles.bottomBar, { paddingBottom: bottom }]}> 
+        <Pressable style={[styles.actionButton, styles.sellButton]}> 
+          <ThemedText style={{ fontSize: 16, fontWeight: "600", color: "#fff" }}>Sell</ThemedText> 
+        </Pressable> 
+        <Pressable style={[styles.actionButton, styles.buyButton]}> 
+          <ThemedText style={{ fontSize: 16, fontWeight: "600", color: "#000" }}>Buy</ThemedText> 
+        </Pressable> 
       </View>
     </GlobalLayout>
   );
@@ -217,6 +272,29 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
+  },
+  bottomBar: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    flexDirection: "row",
+    gap: 12,
+  },
+  actionButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 999,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  sellButton: {
+    backgroundColor: "#ff4d4f",
+  },
+  buyButton: {
+    backgroundColor: "#4ADDBA",
   },
 });
 
