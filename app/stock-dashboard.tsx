@@ -133,6 +133,7 @@ const StockDashboard = () => {
         <View style={{ marginTop: 16 }}>
           <LineChart
             data={currentData}
+            height={220}
             isAnimated
             animateOnDataChange
             onDataChangeAnimationDuration={600}
@@ -160,13 +161,13 @@ const StockDashboard = () => {
               pointerStripHeight: 150,
               pointerStripColor: "rgba(255,255,255,0.2)",
               pointerStripWidth: 1,
-              pointerColor: "transparent",
-              radius: 4,
-              pointerLabelWidth: 90,
+              pointerColor: "#4ADDBA",
+              radius: 6,
+               pointerLabelWidth: 90,
               pointerLabelHeight: 28,
               shiftPointerLabelX: -45,
               shiftPointerLabelY: -36,
-              pointerLabelComponent: (items) => (
+              pointerLabelComponent: (items: any) => (
                 (() => {
                   const PointerLabel = ({ value }: { value: number }) => {
                     useEffect(() => {
