@@ -9,6 +9,7 @@ import { CurveType, LineChart } from "react-native-gifted-charts";
 
 const StockDashboard = () => {
   const [value, setValue] = useState<number>(24908.15);
+  const [hoveredValue, setHoveredValue] = useState<number | undefined>(undefined);
   type Range = "1D" | "5D" | "1W" | "1M" | "1Y";
   const [range, setRange] = useState<Range>("1D");
   const [showLineChart, setShowLineChart] = useState<boolean>(true);
@@ -86,7 +87,7 @@ const StockDashboard = () => {
                 </ThemedText>
               </View>
             </View>
-            <AnimatedCounter value={value} fontSize={35} variant="large" />
+            <AnimatedCounter value={hoveredValue ?? value} fontSize={35} variant="large" />
             <View
               style={{ flexDirection: "row", gap: 4, alignItems: "center" }}
             >
@@ -155,6 +156,44 @@ const StockDashboard = () => {
             xAxisColor={"rgba(255,255,255,0.06)"}
             yAxisColor={"rgba(255,255,255,0.06)"}
             backgroundColor={"transparent"}
+            pointerConfig={{
+              pointerStripHeight: 150,
+              pointerStripColor: "rgba(255,255,255,0.2)",
+              pointerStripWidth: 1,
+              pointerColor: "transparent",
+              radius: 4,
+              pointerLabelWidth: 90,
+              pointerLabelHeight: 28,
+              shiftPointerLabelX: -45,
+              shiftPointerLabelY: -36,
+              pointerLabelComponent: (items) => (
+                (() => {
+                  const PointerLabel = ({ value }: { value: number }) => {
+                    useEffect(() => {
+                      setHoveredValue(value);
+                      return () => setHoveredValue(undefined);
+                    }, [value]);
+                    return (
+                      <View
+                        style={{
+                          paddingHorizontal: 10,
+                          paddingVertical: 6,
+                          borderRadius: 10,
+                          backgroundColor: "#1f2937",
+                          borderWidth: 1,
+                          borderColor: "#4ADDBA",
+                        }}
+                      >
+                        <ThemedText style={{ fontSize: 12, color: "#fff" }}>
+                          {Number(items?.[0]?.value ?? 0).toFixed(2)}
+                        </ThemedText>
+                      </View>
+                    );
+                  };
+                  return <PointerLabel value={Number(items?.[0]?.value ?? 0)} />;
+                })()
+              ),
+            }}
           />
         </View>
         {/* timeline selector */}
