@@ -6,6 +6,7 @@ import { IconSymbol } from "@/components/ui/icon-symbol.ios";
 import React, { useEffect, useMemo, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { CurveType, LineChart } from "react-native-gifted-charts";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const StockDashboard = () => {
@@ -22,6 +23,13 @@ const StockDashboard = () => {
     Number((Math.random() * 14 - 7).toFixed(2))
   );
   const isPositiveReturn = portfolioReturnPct >= 0;
+
+  const [buyPct, setBuyPct] = useState<number>(() => Math.round(Math.random() * 100));
+  const [sellPct, setSellPct] = useState<number>(() => Math.round(Math.random() * 100));
+  const buySV = useSharedValue(buyPct);
+  const sellSV = useSharedValue(sellPct);
+  const buyBarStyle = useAnimatedStyle(() => ({ width: `${buySV.value}%` }));
+  const sellBarStyle = useAnimatedStyle(() => ({ width: `${sellSV.value}%` }));
 
   const dataByRange = useMemo(() => {
     const rng = (min: number, max: number) => Math.random() * (max - min) + min;
@@ -58,6 +66,18 @@ const StockDashboard = () => {
     }, 2000);
     return () => clearInterval(id);
   }, []);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      const nextBuy = Math.round(Math.random() * 100);
+      const nextSell = Math.round(Math.random() * 100);
+      setBuyPct(nextBuy);
+      setSellPct(nextSell);
+      buySV.value = withTiming(nextBuy, { duration: 900 });
+      sellSV.value = withTiming(nextSell, { duration: 900 });
+    }, 1800);
+    return () => clearInterval(id);
+  }, [buySV, sellSV]);
 
   return (
     <GlobalLayout style={styles.container}>
@@ -241,6 +261,54 @@ const StockDashboard = () => {
           </View>
         </View>
       {/* bottom bar */}
+      
+      {/* buying card */}
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          backgroundColor: "rgba(255, 255, 255, 0.06)",
+          borderRadius: 16,
+          padding: 16,
+          marginTop: 12,
+          gap: 12,
+        }}
+      >
+        <View style={{ flex: 1 }}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 8 }}>
+            <ThemedText style={{ fontSize: 14, color: "lightgray" }}>Buying</ThemedText>
+            <ThemedText style={{ fontSize: 14, color: "lightgray" }}>{buyPct}%</ThemedText>
+          </View>
+          <View style={styles.progressTrack}>
+            <Animated.View style={[styles.progressFillBuy, buyBarStyle]} />
+          </View>
+        </View>
+      </View>
+
+      {/* selling card */}
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          backgroundColor: "rgba(255, 255, 255, 0.06)",
+          borderRadius: 16,
+          padding: 16,
+          marginTop: 12,
+          gap: 12,
+        }}
+      >
+        <View style={{ flex: 1 }}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 8 }}>
+            <ThemedText style={{ fontSize: 14, color: "lightgray" }}>Selling</ThemedText>
+            <ThemedText style={{ fontSize: 14, color: "lightgray" }}>{sellPct}%</ThemedText>
+          </View>
+          <View style={styles.progressTrack}>
+            <Animated.View style={[styles.progressFillSell, sellBarStyle]} />
+          </View>
+        </View>
+      </View>
       </View>
       <View style={[styles.bottomBar, { paddingBottom: bottom }]}> 
         <Pressable style={[styles.actionButton, styles.sellButton]}> 
@@ -272,6 +340,20 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
+  },
+  progressTrack: {
+    height: 10,
+    borderRadius: 999,
+    backgroundColor: "rgba(255,255,255,0.12)",
+    overflow: "hidden",
+  },
+  progressFillBuy: {
+    height: "100%",
+    backgroundColor: "#4ADDBA",
+  },
+  progressFillSell: {
+    height: "100%",
+    backgroundColor: "#ff4d4f",
   },
   bottomBar: {
     position: "absolute",
