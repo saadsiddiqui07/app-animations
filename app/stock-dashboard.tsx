@@ -15,6 +15,7 @@ const StockDashboard = () => {
   const [range, setRange] = useState<Range>("1D");
   const [showLineChart, setShowLineChart] = useState<boolean>(true);
   const { bottom } = useSafeAreaInsets();
+  const ranges: Range[] = useMemo(() => ["1D", "5D", "1W", "1M", "1Y"], []);
 
   const [portfolioValue] = useState<number>(() =>
     Number((Math.random() * 90000 + 1000).toFixed(2))
@@ -63,7 +64,7 @@ const StockDashboard = () => {
     const id = setInterval(() => {
       const next = Math.random() * 10000 + 2400;
       setValue((prev) => (prev === next ? prev : next));
-    }, 2000);
+    }, 3500);
     return () => clearInterval(id);
   }, []);
 
@@ -162,9 +163,8 @@ const StockDashboard = () => {
         <View style={{ marginTop: 16 }}>
           <LineChart
             data={currentData}
-            isAnimated
+            isAnimated={true}
             animateOnDataChange
-            onDataChangeAnimationDuration={600}
             curved
             curveType={CurveType.CUBIC}
             curvature={0.2}
@@ -180,8 +180,7 @@ const StockDashboard = () => {
             hideYAxisText
             initialSpacing={0}
             adjustToWidth
-            showVerticalLines
-            verticalLinesColor={"rgba(255,255,255,0.06)"}
+            showVerticalLines={false}
             xAxisColor={"rgba(255,255,255,0.06)"}
             yAxisColor={"rgba(255,255,255,0.06)"}
             backgroundColor={"transparent"}
@@ -197,7 +196,7 @@ const StockDashboard = () => {
             paddingHorizontal: 8,
           }}
         >
-          {["1D", "5D", "1W", "1M", "1Y"].map((r) => {
+          {ranges.map((r) => {
             const active = r === range;
             return (
               <Pressable
